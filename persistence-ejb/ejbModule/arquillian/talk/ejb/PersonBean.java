@@ -9,9 +9,11 @@ import javax.persistence.Query;
 import arquillian.talk.jpa.Person;
 
 @Remote(PersonRemote.class)
-public @Stateless class PersonBean implements PersonRemote {
+@Stateless 
+public class PersonBean implements PersonRemote {
+	// Note the access modifier is default to support mock assignment by JUnit test
 	@PersistenceContext
-	private EntityManager entityManager;
+	EntityManager entityManager;
 	
 	@Override
 	public Person getPerson(String name) {
