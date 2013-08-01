@@ -2,6 +2,8 @@ package arquillian.talk.jpa;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -63,6 +65,18 @@ public class Person implements Serializable {
 
 	public void setAddresses(Set<Address> addresses) {
 		this.addresses = addresses;
+	}
+
+	@Override
+	public String toString() {
+		String s = "Person ID: " +id + "\nName: " + name + "\nDOB: " + SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(dob);
+		if (addresses != null && addresses.size() > 0) {
+			int c = 1;
+			for (Address address : addresses) {
+				s = s + "\nAddress#" + c + " ID: " + address.getId();
+			}
+		}
+		return s;
 	}
 	
 }
