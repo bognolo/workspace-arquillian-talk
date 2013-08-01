@@ -3,6 +3,7 @@ package arquillian.talk.ejb;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -19,7 +20,13 @@ public class PersonBean implements PersonRemote {
 	public Person getPerson(String name) {
 		Query query = entityManager.createQuery("FROM Person WHERE name = :name");
 		query.setParameter("name", name);
-		return (Person) query.getSingleResult();
+		Person person;
+		try {
+			person = (Person) query.getSingleResult();
+		} catch (NoResultException e) {
+			person = null;
+		}
+		return person;
 	}
 
 	@Override
@@ -28,8 +35,8 @@ public class PersonBean implements PersonRemote {
 	}
 
 	@Override
-	public void deletePerson(Person person) {
-		entityManager.remove(person);
+	public void deletePerson(Long id) {
+		entityManager.remove(getPerson(id));
 	}
 
 	@Override

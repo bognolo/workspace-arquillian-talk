@@ -55,15 +55,11 @@ public class PersonBeanJUnit {
 
 	@Test
 	public void testDeletePerson() {
-		Person person = new Person();
-		person.setId(MY_ID);
-		personBean.deletePerson(person);
+		personBean.deletePerson(MY_ID);
 	}
 
 	@Test(expected = PersistenceException.class)
 	public void testDeletePersonError() {
-		Person person = new Person();
-		person.setId(INVALID_ID);
-		personBean.deletePerson(person);
+		personBean.deletePerson(INVALID_ID);
 	}
 }

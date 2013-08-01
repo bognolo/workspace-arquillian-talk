@@ -8,6 +8,6 @@ import arquillian.talk.jpa.Person;
 public interface PersonRemote {
 	Person getPerson(Long id);
 	Person getPerson(String name);
-	void deletePerson(Person person);
+	void deletePerson(Long id);
 	void savePerson(Person person);
 }
