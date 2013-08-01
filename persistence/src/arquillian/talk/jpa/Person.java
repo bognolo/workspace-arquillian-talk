@@ -73,7 +73,7 @@ public class Person implements Serializable {
 		if (addresses != null && addresses.size() > 0) {
 			int c = 1;
 			for (Address address : addresses) {
-				s = s + "\nAddress#" + c + " ID: " + address.getId();
+				s = s + "\n\nAddress#" + c++ + ": " + address.toString();
 			}
 		}
 		return s;
