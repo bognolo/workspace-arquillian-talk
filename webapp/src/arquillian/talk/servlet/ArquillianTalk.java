@@ -27,8 +27,8 @@ public class ArquillianTalk extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	@EJB(lookup = "java:global/persistence-ear/persistence-ejb/PersonBean!arquillian.talk.ejb.PersonRemote")
-	PersonRemote personRemote;
+	@EJB(lookup = PersonRemote.JNDI_NAME)
+	private PersonRemote personRemote;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
