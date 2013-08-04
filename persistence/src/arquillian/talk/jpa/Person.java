@@ -7,33 +7,56 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-
 /**
  * The persistent class for the person database table.
  * 
  */
 @Entity
-@Table(name="person")
+@Table(name = "person")
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(unique = true, nullable = false)
 	private Long id;
 
-    @Temporal( TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	private Date dob;
 
-	@Column(length=2147483647)
+	@Column(length = 2147483647)
 	private String name;
 
-	//bi-directional many-to-one association to Address
-	@OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	// bi-directional many-to-one association to Address
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Address> addresses;
 
-    public Person() {
-    }
+	public Person() {
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean equals = obj instanceof Person;
+		Person otherPerson = (Person) obj;
+
+		equals &= getName() != null && getName().equals(otherPerson.getName());
+		equals &= getDob() != null && getDob().equals(otherPerson.getDob());
+		equals &= getAddresses() != null && otherPerson.getAddresses() != null;
+
+		if (equals) {
+			equals &= getAddresses().size() == otherPerson.getAddresses()
+					.size();
+			for (Address address : getAddresses().toArray(new Address[0])) {
+				boolean anyMatches = false;
+				for (Address otheraddAddress : otherPerson.getAddresses().toArray(new Address[0])) {
+					anyMatches |= address.equals(otheraddAddress);
+				}
+				equals &= anyMatches;
+			}
+		}
+
+		return equals;
+	}
 
 	/**
 	 * @param dob
@@ -93,7 +116,13 @@ public class Person implements Serializable {
 
 	@Override
 	public String toString() {
-		String s = "Person ID: " +id + "\nName: " + name + "\nDOB: " + SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(dob);
+		String s = "Person ID: "
+				+ id
+				+ "\nName: "
+				+ name
+				+ "\nDOB: "
+				+ SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM)
+						.format(dob);
 		if (addresses != null && addresses.size() > 0) {
 			int c = 1;
 			for (Address address : addresses) {
@@ -102,5 +131,5 @@ public class Person implements Serializable {
 		}
 		return s;
 	}
-	
+
 }

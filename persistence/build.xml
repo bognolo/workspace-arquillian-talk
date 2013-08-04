@@ -72,7 +72,7 @@
             <classpath refid="persistence.classpath"/>
         </javac>
         <jar destfile="dist/${ant.project.name}.jar">
-        	<fileset dir="build" />
+        	<fileset dir="build/classes" />
         </jar>
     </target>
 </project>

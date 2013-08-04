@@ -34,6 +34,18 @@ public class Address implements Serializable {
     public Address() {
     }
 
+	@Override
+	public boolean equals(Object obj) {
+		boolean equals = obj instanceof Address;
+		Address otherAddress  = (Address) obj;
+		
+		equals &= getCity() != null && getCity().equals(otherAddress.getCity());
+		equals &= getPostcode() != null && getPostcode().equals(otherAddress.getPostcode());
+		equals &= getStreet() != null && getStreet().equals(otherAddress.getStreet());
+		
+		return equals;
+	}
+
 	/**
 	 * @param city
 	 * @param postcode
