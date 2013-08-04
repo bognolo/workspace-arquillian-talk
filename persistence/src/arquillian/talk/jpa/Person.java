@@ -35,6 +35,30 @@ public class Person implements Serializable {
     public Person() {
     }
 
+	/**
+	 * @param dob
+	 * @param name
+	 * @param addresses
+	 */
+	public Person(Date dob, String name, Set<Address> addresses) {
+		this.dob = dob;
+		this.name = name;
+		this.addresses = addresses;
+	}
+
+	/**
+	 * @param id
+	 * @param dob
+	 * @param name
+	 * @param addresses
+	 */
+	public Person(Long id, Date dob, String name, Set<Address> addresses) {
+		this.id = id;
+		this.dob = dob;
+		this.name = name;
+		this.addresses = addresses;
+	}
+
 	public Long getId() {
 		return this.id;
 	}

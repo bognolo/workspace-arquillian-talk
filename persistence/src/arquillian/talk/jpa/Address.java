@@ -34,6 +34,35 @@ public class Address implements Serializable {
     public Address() {
     }
 
+	/**
+	 * @param city
+	 * @param postcode
+	 * @param street
+	 * @param person
+	 */
+	public Address(String city, Integer postcode, String street, Person person) {
+		this.city = city;
+		this.postcode = postcode;
+		this.street = street;
+		this.person = person;
+	}
+
+	/**
+	 * @param id
+	 * @param city
+	 * @param postcode
+	 * @param street
+	 * @param person
+	 */
+	public Address(Long id, String city, Integer postcode, String street,
+			Person person) {
+		this.id = id;
+		this.city = city;
+		this.postcode = postcode;
+		this.street = street;
+		this.person = person;
+	}
+
 	public Long getId() {
 		return this.id;
 	}
