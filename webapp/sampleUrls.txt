@@ -1,1 +1,1 @@
-http://localhost:8080/webapp/?name=new%20person&dob=18/8/2010&street=Vicolo%20Corto&city=Pavia&postcode=30226&street=Vicolo%20Stretto&city=Modena&postcode=28775
+http://127.0.0.1:8080/webapp/?name=new%20person&dob=18/8/2010&street=Vicolo%20Corto&city=Pavia&postcode=30226&street=Vicolo%20Stretto&city=Modena&postcode=28775
