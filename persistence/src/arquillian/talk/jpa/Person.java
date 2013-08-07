@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ public class Person implements Serializable {
 
 	// bi-directional many-to-one association to Address
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Address> addresses;
+	private Set<Address> addresses = new HashSet<Address>();
 
 	public Person() {
 	}
@@ -56,6 +57,15 @@ public class Person implements Serializable {
 		}
 
 		return equals;
+	}
+
+	/**
+	 * @param dob
+	 * @param name
+	 */
+	public Person(Date dob, String name) {
+		this.dob = dob;
+		this.name = name;
 	}
 
 	/**

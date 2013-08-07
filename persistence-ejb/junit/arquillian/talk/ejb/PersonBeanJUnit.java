@@ -10,8 +10,7 @@ import arquillian.talk.jpa.Person;
 import javax.persistence.PersistenceException;
 
 /**
- * @author luca
- * 
+ * JUnit test for PersonBean
  */
 public class PersonBeanJUnit {
 
