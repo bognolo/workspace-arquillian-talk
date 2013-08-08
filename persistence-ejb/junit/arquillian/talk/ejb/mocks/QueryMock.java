@@ -1,5 +1,6 @@
 package arquillian.talk.ejb.mocks;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,6 +37,14 @@ public class QueryMock implements Query {
 		person.setId(PersonBeanJUnit.MY_ID);
 		person.setAddresses(new HashSet<Address>());
 		return person;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List getResultList() {
+		ArrayList<Person> list = new ArrayList<Person>();
+		list.add((Person) getSingleResult());
+		return list;
 	}
 
 	@Override
@@ -118,13 +127,6 @@ public class QueryMock implements Query {
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List getResultList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
