@@ -22,17 +22,18 @@ import arquillian.talk.jpa.Person;
  */
 @WebServlet("/")
 public class ArquillianTalk extends HttpServlet {
+	private static final long serialVersionUID = 3938201633190834833L;
+
 	private static final String USAGE = "Please pass values on the query string. Valid parameters are:"
 			+ " <ul><li>id</li><li>name</li><li>dob</li><li>street</li><li>city</li><li>postcode</li><li>deleteID</li></ul>";
-
-	private static final long serialVersionUID = 1L;
 
 	@EJB(lookup = PersonRemote.JNDI_NAME)
 	private PersonRemote personRemote;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * {@inheritDoc}
+	 *
+	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -52,58 +53,20 @@ public class ArquillianTalk extends HttpServlet {
 			// Must be a query
 			if (id != null) {
 				// Search by ID
-				Person person = personRemote.getPerson(Long.parseLong(id));
-				if (person != null) {
-				responseValue = person.toString();
-				} else {
-					responseValue = "Person with ID=\"" +id+ "\" was not found.";
-				}
+				responseValue = searchById(id);
 			} else if (name != null) {
 				// Search by name
-				Person person = personRemote.getPerson(name);
-				if (person != null) {
-				responseValue = person.toString();
-				} else {
-					responseValue = "Person with name=\"" +name+ "\" was not found.";
-				}
+				responseValue = searchByName(name);
 			} else if (deleteId != null) {
 				// Delete by ID
-				Person person = personRemote
-						.getPerson(Long.parseLong(deleteId));
-				personRemote.deletePerson(Long.parseLong(deleteId));
-				responseValue = "Deleted person:<br/>" + person.toString();
+				responseValue = deleteById(deleteId);
 			} else {
 				// Show usage instructions
 				responseValue = USAGE;
 			}
 		} else if (parameterCount > 0) {
 			// Insert a new person
-			Person person = new Person();
-			try {
-				person.setDob(SimpleDateFormat.getDateInstance(
-						SimpleDateFormat.MEDIUM).parse(dob));
-			} catch (ParseException e) {
-				person.setDob(new Date());
-			}
-			person.setName(name);
-			person.setAddresses(new HashSet<Address>());
-			int maxLength = Math.max(street.length,
-					Math.max(city.length, postcode.length));
-
-			for (int i = 0; i < maxLength; i++) {
-				Address address1 = new Address();
-				address1.setPerson(person);
-				if (i < street.length)
-					address1.setStreet(street[i]);
-				if (i < city.length)
-					address1.setCity(city[i]);
-				if (i < postcode.length)
-					address1.setPostcode(Integer.parseInt(postcode[i]));
-				person.getAddresses().add(address1);
-			}
-			personRemote.savePerson(person);
-
-			responseValue = "Saved person:<br/>" + person.toString();
+			responseValue = addPerson(name, dob, street, postcode, city);
 		} else {
 			// Show usage instructions
 			responseValue = USAGE;
@@ -112,5 +75,87 @@ public class ArquillianTalk extends HttpServlet {
 		response.getWriter().print(
 				"<html><body>" + responseValue.replaceAll("\n", "<br/>")
 						+ "</body></html>");
+	}
+
+	/**
+	 * @param name
+	 * @param dob
+	 * @param street
+	 * @param postcode
+	 * @param city
+	 * @return
+	 */
+	private String addPerson(String name, String dob, String[] street, String[] postcode, String[] city) {
+		String responseValue;
+		Person person = new Person();
+		try {
+			person.setDob(SimpleDateFormat.getDateInstance(
+					SimpleDateFormat.MEDIUM).parse(dob));
+		} catch (ParseException e) {
+			person.setDob(new Date());
+		}
+		person.setName(name);
+		person.setAddresses(new HashSet<Address>());
+		int maxLength = Math.max(street.length,
+				Math.max(city.length, postcode.length));
+
+		for (int i = 0; i < maxLength; i++) {
+			Address address1 = new Address();
+			address1.setPerson(person);
+			if (i < street.length)
+				address1.setStreet(street[i]);
+			if (i < city.length)
+				address1.setCity(city[i]);
+			if (i < postcode.length)
+				address1.setPostcode(Integer.parseInt(postcode[i]));
+			person.getAddresses().add(address1);
+		}
+		personRemote.savePerson(person);
+
+		responseValue = "Saved person:<br/>" + person.toString();
+		return responseValue;
+	}
+
+	/**
+	 * @param deleteId
+	 * @return
+	 */
+	private String deleteById(String deleteId) {
+		String responseValue;
+		Person person = personRemote
+				.getPerson(Long.parseLong(deleteId));
+		personRemote.deletePerson(Long.parseLong(deleteId));
+		responseValue = "Deleted person:<br/>" + person.toString();
+		return responseValue;
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	private String searchByName(String name) {
+		String responseValue;
+		Person person = personRemote.getPerson(name);
+		if (person != null) {
+		responseValue = person.toString();
+		} else {
+			responseValue = "Person with name=\"" +name+ "\" was not found.";
+		}
+		return responseValue;
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	private String searchById(String id) {
+		String responseValue;
+		Person person = personRemote.getPerson(Long.parseLong(id));
+		if (person != null) {
+		responseValue = person.toString();
+		} else {
+			responseValue = "Person with ID=\"" +id+ "\" was not found.";
+		}
+		return responseValue;
 	}
 }
